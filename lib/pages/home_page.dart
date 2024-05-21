@@ -63,7 +63,8 @@ class _HomePageState extends State<HomePage> {
 
 //function to add venue to occupiedRef
 
-  void _addVenueToOccupied(BuildContext context, String VenueId, Color VenueColor) {
+  void _addVenueToOccupied(
+      BuildContext context, String VenueId, Color VenueColor) {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
       SnackBar(
@@ -167,7 +168,8 @@ class _HomePageState extends State<HomePage> {
     return releasedVenuesList.containsValue(venueNameR);
   }
 
-  void _addVenueToReleased(BuildContext context, String VenueId, Color VenueColor) {
+  void _addVenueToReleased(
+      BuildContext context, String VenueId, Color VenueColor) {
     //releaseddRef.push().set(VenueId);
 //  releaseddRef.onValue.listen((eventX) {
 //       setState(() {
@@ -249,7 +251,7 @@ class _HomePageState extends State<HomePage> {
         int mySessionEnd = int.parse(mySessionPrts[1]);
 
         //print(mySessionPrts[0] +" to "+ mySessionPrts[1] + currentHour.toString());
-       // print(mySessionStrt);
+        // print(mySessionStrt);
         if (currentHour > mySessionStrt && currentHour < mySessionEnd) {
           List<dynamic> venueList = currentDaySessions[sessTime];
           //  print(venueList);
@@ -298,7 +300,7 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
             onPressed: () {
-            //  print(timetableData1.keys);
+              //  print(timetableData1.keys);
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -313,63 +315,57 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Container(
         child: InteractiveViewer(
-           boundaryMargin:const  EdgeInsets.all(double.infinity),
+          boundaryMargin: const EdgeInsets.all(double.infinity),
           // boundaryMargin: EdgeInsets.all(20.0),
-           constrained: false,
-           minScale: 0.0001,
+          constrained: false,
+          minScale: 0.0001,
           //  maxScale: 4.0,
           // scaleEnabled: true,
-         
-          
+
           // // transformationController: TransformationController(),
-              onInteractionStart: (_) {
-          // //   // Store the current scale when the interaction starts
-             
+          onInteractionStart: (_) {
+            // //   // Store the current scale when the interaction starts
+
             setState(() {
-          // //     // _scale = details.scale;
-          //    _scale = TransformationController().value.getMaxScaleOnAxis();
-        _rotation = oldq;
-             });
-          print("on start "+_rotation.toString());
-            },
-           onInteractionUpdate: (ScaleUpdateDetails details) {
-              _scale = TransformationController().value.getMaxScaleOnAxis();
-            
-             setState(() {
+              // //     // _scale = details.scale;
+              //    _scale = TransformationController().value.getMaxScaleOnAxis();
+              _rotation = oldq;
+            });
+            print("on start " + _rotation.toString());
+          },
+          onInteractionUpdate: (ScaleUpdateDetails details) {
+            _scale = TransformationController().value.getMaxScaleOnAxis();
+
+            setState(() {
               //  _scale = TransformationController().value.getMaxScaleOnAxis();
-               newq = details.rotation;
-               _scale = details.scale;
-               _rotation = details.rotation;
-              
-              
-             });
-           },
-               onInteractionEnd: (details) {
-            // Store the current rotation angle when interaction ends
-            setState(() {
-             oldq = newq;
-             print("on end "+oldq.toString());
+              newq = details.rotation;
+              _scale = details.scale;
+              _rotation = details.rotation;
             });
           },
-           child: Transform.rotate(
-             angle: _rotation,
-             
-             
-            
+          onInteractionEnd: (details) {
+            // Store the current rotation angle when interaction ends
+            setState(() {
+              oldq = newq;
+              print("on end " + oldq.toString());
+            });
+          },
+          child: Transform.rotate(
+            angle: _rotation,
             child: Container(
               child: Stack(
                 children: [
                   Container(
                     //color: Colors.white,
                     width: 1200,
-                    
+
                     height: 2000,
-                       decoration: const BoxDecoration(
-                         image: DecorationImage(
-                          image: AssetImage("assets/VNS.png"),
-                           fit: BoxFit.cover,
-                        ),
-                       ),
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("assets/VNS.png"),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                     /* add child content here */
                   ),
                   CustomVenue(
@@ -382,78 +378,64 @@ class _HomePageState extends State<HomePage> {
                     ),
                     topP: 1,
                     name: 'B14LR02',
-                  
                     onTripleTap: () {
                       //  addNametoOcc(checkSessionForName("B14LR04"), "B14LR04");
-                      
-                 
 
-                        if(checkSessionForName("B14LR02") == Colors.green) {
-
-                          _addVenueToOccupied(
-                        context,
-                        "B14LR02",
-                        checkSessionForName("B14LR02"),);
-
-                        }else{
-                          _addVenueToReleased(context, "B14LR02", checkSessionForName("B14LR02"));
-
-                        }
-                      
+                      if (checkSessionForName("B14LR02") == Colors.green) {
+                        _addVenueToOccupied(
+                          context,
+                          "B14LR02",
+                          checkSessionForName("B14LR02"),
+                        );
+                      } else {
+                        _addVenueToReleased(
+                            context, "B14LR02", checkSessionForName("B14LR02"));
+                      }
                     },
                   ),
                   CustomVenue(
-                    borderRadius: BorderRadius.circular(1),
-                    width: 114,
-                    height: 44,
-                    leftp: 60,
-                    color: checkSessionForName(
-                      "B14LR03",
-                    ),
-                    topP: 1,
-                    name: 'B14LR03',
-                   
+                      borderRadius: BorderRadius.circular(1),
+                      width: 114,
+                      height: 44,
+                      leftp: 60,
+                      color: checkSessionForName(
+                        "B14LR03",
+                      ),
+                      topP: 1,
+                      name: 'B14LR03',
                       onTripleTap: () {
-
-  if(checkSessionForName("B14LR03") == Colors.green) {
-
+                        if (checkSessionForName("B14LR03") == Colors.green) {
                           _addVenueToOccupied(
-                        context,
-                        "B14LR02",
-                        checkSessionForName("B14LR03"),);
-
-                        }else{
-                          _addVenueToReleased(context, "B14LR03", checkSessionForName("B14LR02"));
-
+                            context,
+                            "B14LR02",
+                            checkSessionForName("B14LR03"),
+                          );
+                        } else {
+                          _addVenueToReleased(context, "B14LR03",
+                              checkSessionForName("B14LR02"));
                         }
+                      }),
 
-                      }
-                  ),
-                      
                   CustomVenue(
-                    borderRadius: BorderRadius.circular(1),
-                    width: 150,
-                    height: 46,
-                    leftp: 60,
-                    color: checkSessionForName('B13LR02'),
-                    topP: 90,
-                    name: 'B13LR02',
-                    onLongPress: () {
-                    
-                      if(checkSessionForName("B13LR02") == Colors.green) {
-
+                      borderRadius: BorderRadius.circular(1),
+                      width: 150,
+                      height: 46,
+                      leftp: 60,
+                      color: checkSessionForName('B13LR02'),
+                      topP: 90,
+                      name: 'B13LR02',
+                      onLongPress: () {
+                        if (checkSessionForName("B13LR02") == Colors.green) {
                           _addVenueToOccupied(
-                        context,
-                        "B13LR02",
-                        checkSessionForName("B13LR02"),);
-
-                        }else{
-                          _addVenueToReleased(context, "B13LR02", checkSessionForName("B13LR02"));
-
+                            context,
+                            "B13LR02",
+                            checkSessionForName("B13LR02"),
+                          );
+                        } else {
+                          _addVenueToReleased(context, "B13LR02",
+                              checkSessionForName("B13LR02"));
                         }
-                    
-                    }
-                  ),
+                      }),
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
                     width: 170,
@@ -462,18 +444,17 @@ class _HomePageState extends State<HomePage> {
                     color: checkSessionForName("B13LR01"),
                     topP: 90,
                     name: 'B13LR01',
-                    onTripleTap: (){
-                        if(checkSessionForName("B13LR01") == Colors.green) {
-
-                          _addVenueToOccupied(
-                        context,
-                        "B13LR01",
-                        checkSessionForName("B13LR01"),);
-
-                        }else{
-                          _addVenueToReleased(context, "B13LR01", checkSessionForName("B14LR02"));
-
-                        }
+                    onTripleTap: () {
+                      if (checkSessionForName("B13LR01") == Colors.green) {
+                        _addVenueToOccupied(
+                          context,
+                          "B13LR01",
+                          checkSessionForName("B13LR01"),
+                        );
+                      } else {
+                        _addVenueToReleased(
+                            context, "B13LR01", checkSessionForName("B14LR02"));
+                      }
                     },
                   ),
                   //BLOCK 15 RIGHT WING
@@ -496,18 +477,16 @@ class _HomePageState extends State<HomePage> {
                     topP: 603,
                     name: 'B15RWF04',
                     onTripleTap: () {
-  if(checkSessionForName("B15RWF04") == Colors.green) {
-
-                          _addVenueToOccupied(
-                        context,
-                        "B15RWF04",
-                        checkSessionForName("B15RWF04"),);
-
-                        }else{
-                          _addVenueToReleased(context, "B15RWF04", checkSessionForName("B15RWF04"));
-
-                        }
-
+                      if (checkSessionForName("B15RWF04") == Colors.green) {
+                        _addVenueToOccupied(
+                          context,
+                          "B15RWF04",
+                          checkSessionForName("B15RWF04"),
+                        );
+                      } else {
+                        _addVenueToReleased(context, "B15RWF04",
+                            checkSessionForName("B15RWF04"));
+                      }
                     },
                   ),
                   CustomVenue(
@@ -518,101 +497,187 @@ class _HomePageState extends State<HomePage> {
                     color: checkSessionForName("B15RWF03"),
                     topP: 650,
                     name: 'B15RWF03',
-                       onTripleTap: () {
-  if(checkSessionForName("B15RWF03") == Colors.green) {
-
-                          _addVenueToOccupied(
-                        context,
-                        "B15RWF03",
-                        checkSessionForName("B15RWF03"),);
-
-                        }else{
-                          _addVenueToReleased(context, "B15RWF03", checkSessionForName("B15RWF03"));
-
-                        }
-
+                    onTripleTap: () {
+                      if (checkSessionForName("B15RWF03") == Colors.green) {
+                        _addVenueToOccupied(
+                          context,
+                          "B15RWF03",
+                          checkSessionForName("B15RWF03"),
+                        );
+                      } else {
+                        _addVenueToReleased(context, "B15RWF03",
+                            checkSessionForName("B15RWF03"));
+                      }
                     },
                   ),
                   CustomVenue(
-                  borderRadius: BorderRadius.circular(1),
+                    borderRadius: BorderRadius.circular(1),
                     width: 82,
                     height: 42,
                     leftp: 275,
-                    color: Colors.blue,
+                    color: checkSessionForName("B15RWF02"),
                     topP: 695,
-                    name: 'Bl 15',
-                    onLongPress: () {},
+                    name: 'B15RWF02',
+                    onTripleTap: () {
+                      if (checkSessionForName("B15RWF02") == Colors.green) {
+                        _addVenueToOccupied(
+                          context,
+                          "B15RWF02",
+                          checkSessionForName("B15RWF022"),
+                        );
+                      } else {
+                        _addVenueToReleased(context, "B15RWF02",
+                            checkSessionForName("B15RWF02"));
+                      }
+                    },
                   ),
                   CustomVenue(
-               borderRadius: BorderRadius.circular(1),
+                    borderRadius: BorderRadius.circular(1),
                     width: 82,
                     height: 42,
                     leftp: 275,
-                    color: Colors.greenAccent,
-                   topP: 740,
-                    name: 'Bl 15',
-                    onLongPress: () {},
+                    color: checkSessionForName("B15LGFB"),
+                    topP: 740,
+                    name: 'B15LGFB',
+                  onTripleTap: () {
+                      if (checkSessionForName("B15LGBF") == Colors.green) {
+                        _addVenueToOccupied(
+                          context,
+                          "B15LGBF",
+                          checkSessionForName("B15LGBF"),
+                        );
+                      } else {
+                        _addVenueToReleased(context, "B15LGBF",
+                            checkSessionForName("B15LGBF"));
+                      }
+                    }
                   ),
                   CustomVenue(
-                   borderRadius: BorderRadius.circular(1),
+                    borderRadius: BorderRadius.circular(1),
                     width: 82,
                     height: 42,
                     leftp: 275,
-                    color: Colors.grey,
+                    color: Colors.green,
                     topP: 785,
                     name: 'Bl 15',
-                    onLongPress: () {},
+                    onTripleTap: () {
+                      if (checkSessionForName("B15R") == Colors.green) {
+                        _addVenueToOccupied(
+                          context,
+                          "B15R",
+                          checkSessionForName("B15R"),
+                        );
+                      } else {
+                        _addVenueToReleased(context, "B15R",
+                            checkSessionForName("B15"));
+                      }
+                    },
                   ),
                   //BLOCK 15 LEFT WING FROM BOTTOM
                   CustomVenue(
-                   borderRadius: BorderRadius.circular(1),
+                    borderRadius: BorderRadius.circular(1),
                     width: 82,
                     height: 42,
                     leftp: 185,
-                    color: Colors.pink,
-                   topP: 785,
-                    name: 'Bl 15',
-                    onLongPress: () {},
-                  ),
-                  CustomVenue(
-                   borderRadius: BorderRadius.circular(1),
-                    width: 82,
-                    height: 42,
-                    leftp: 185,
-                    color: Colors.yellow,
-                    topP: 740,
-                    name: 'Bl 15',
-                    onLongPress: () {},
-                  ),
-                  CustomVenue(
-                 borderRadius: BorderRadius.circular(1),
-                    width: 82,
-                    height: 42,
-                    leftp: 185,
-                    color: Colors.grey,
-                   topP: 695,
-                    name: 'Bl 15',
-                    onLongPress: () {},
+                    color: Colors.green,
+                    topP: 785,
+                    name: 'B15',
+                    onTripleTap: () {
+                      if (checkSessionForName("B1") == Colors.green) {
+                        _addVenueToOccupied(
+                          context,
+                          "B15R",
+                          checkSessionForName("B15"),
+                        );
+                      } else {
+                        _addVenueToReleased(context, "B15R",
+                            checkSessionForName("B1"));
+                      }
+                    },
                   ),
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
                     width: 82,
                     height: 42,
                     leftp: 185,
-                    color: Colors.greenAccent,
-                   topP: 650,
-                    name: 'Bl 15',
-                    onLongPress: () {},
+                    color: checkSessionForName("B15LGF"),
+                    topP: 740,
+                    name: 'B15LGF',
+                    onTripleTap: () {
+                      if (checkSessionForName("B15LGF") == Colors.green) {
+                        _addVenueToOccupied(
+                          context,
+                          "B15LGF",
+                          checkSessionForName("B15LGF"),
+                        );
+                      } else {
+                        _addVenueToReleased(context, "B15LGF",
+                            checkSessionForName("B15LGF"));
+                      }
+                    },
                   ),
                   CustomVenue(
-                  borderRadius: BorderRadius.circular(1),
+                    borderRadius: BorderRadius.circular(1),
                     width: 82,
                     height: 42,
                     leftp: 185,
-                    color: Colors.blue,
-                        topP: 605,
-                    name: 'Bl 15',
-                    onLongPress: () {},
+                    color: checkSessionForName("B15LWF02"),
+                    topP: 695,
+                    name: 'B15LWF02',
+                    onTripleTap: () {
+                      if (checkSessionForName("B15LWF02") == Colors.green) {
+                        _addVenueToOccupied(
+                          context,
+                          "B15LWF02",
+                          checkSessionForName("B15LWF02"),
+                        );
+                      } else {
+                        _addVenueToReleased(context, "B15LWF02",
+                            checkSessionForName("B15LWF02"));
+                      }
+                    },
+                  ),
+                  CustomVenue(
+                    borderRadius: BorderRadius.circular(1),
+                    width: 82,
+                    height: 42,
+                    leftp: 185,
+                    color: checkSessionForName("B15LWF03"),
+                    topP: 650,
+                    name: 'B15LWF03',
+                   onTripleTap: () {
+                      if (checkSessionForName("B15LWF03") == Colors.green) {
+                        _addVenueToOccupied(
+                          context,
+                          "B15LWF03",
+                          checkSessionForName("B15LWF03"),
+                        );
+                      } else {
+                        _addVenueToReleased(context, "B15LWF03",
+                            checkSessionForName("B15LWF03"));
+                      }
+                    },
+                  ),
+                  CustomVenue(
+                    borderRadius: BorderRadius.circular(1),
+                    width: 82,
+                    height: 42,
+                    leftp: 185,
+                    color: checkSessionForName("B15LWF4"),
+                    topP: 605,
+                    name: 'B15LWF04',
+                    onTripleTap: () {
+                      if (checkSessionForName("B15LWF04") == Colors.green) {
+                        _addVenueToOccupied(
+                          context,
+                          "B15LWF04",
+                          checkSessionForName("B15LWF04"),
+                        );
+                      } else {
+                        _addVenueToReleased(context, "B15LWF04",
+                            checkSessionForName("B15LWF04"));
+                      }
+                    }
                     //MWISHO WA BLCK WA BLCK 5 LEFT WING
                   ),
                   CustomVenue(
@@ -724,7 +789,7 @@ class _HomePageState extends State<HomePage> {
                           context, "CLASSIII", checkSessionForName("CLASSIII"));
                     },
                   ),
-                      
+
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
                     width: 112,
@@ -755,7 +820,7 @@ class _HomePageState extends State<HomePage> {
                     name: 'B16LR01',
                     onLongPress: () {},
                   ),
-                      
+
                   //LEFT SIDE WORKSHOPS
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
@@ -767,7 +832,7 @@ class _HomePageState extends State<HomePage> {
                     name: 'Bl 15',
                     onLongPress: () {},
                   ),
-                      
+
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
                     width: 49,
@@ -788,11 +853,11 @@ class _HomePageState extends State<HomePage> {
                     name: 'Bl 15',
                     onLongPress: () {},
                   ),
-                      
+
                   //MIDDLE CLASSES
-                      
+
                   CustomVenue(
-                  borderRadius: BorderRadius.circular(1),
+                    borderRadius: BorderRadius.circular(1),
                     width: 49,
                     height: 80,
                     leftp: 361,
@@ -801,7 +866,7 @@ class _HomePageState extends State<HomePage> {
                     name: 'Bl 15',
                     onLongPress: () {},
                   ),
-                      
+
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
                     width: 49,
@@ -811,11 +876,10 @@ class _HomePageState extends State<HomePage> {
                     topP: 961,
                     name: 'Bl 15',
 
-                   // onLongPress: () {},
-
+                    // onLongPress: () {},
                   ),
                   //BLOCK 06
-                      
+
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
                     width: 220,
@@ -828,14 +892,15 @@ class _HomePageState extends State<HomePage> {
                     //   // addNameToList('B06');
                     // },
                     onTripleTap: () {
-                      _addVenueToOccupied(context, "B06", checkSessionForName('B06'));
+                      _addVenueToOccupied(
+                          context, "B06", checkSessionForName('B06'));
                       occupiedVenueList.forEach((key, value) {
                         print(value);
                         print('double');
                       });
                     },
                   ),
-                      
+
                   //B12 AND CLASS VIII
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
@@ -857,7 +922,7 @@ class _HomePageState extends State<HomePage> {
                     name: 'CLASSVIII',
                     onLongPress: () {},
                   ),
-                      
+
                   //BLOCK 2 LECTURE ROOMS
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
@@ -870,7 +935,7 @@ class _HomePageState extends State<HomePage> {
                     onLongPress: () {},
                   ),
                   CustomVenue(
-                     borderRadius: BorderRadius.circular(1),
+                    borderRadius: BorderRadius.circular(1),
                     width: 50,
                     height: 90,
                     leftp: 460,
@@ -880,7 +945,7 @@ class _HomePageState extends State<HomePage> {
                     onLongPress: () {},
                   ),
                   CustomVenue(
-                     borderRadius: BorderRadius.circular(1),
+                    borderRadius: BorderRadius.circular(1),
                     width: 50,
                     height: 90,
                     leftp: 410,
@@ -890,7 +955,7 @@ class _HomePageState extends State<HomePage> {
                     onLongPress: () {},
                   ),
                   CustomVenue(
-                   borderRadius: BorderRadius.circular(1),
+                    borderRadius: BorderRadius.circular(1),
                     width: 50,
                     height: 90,
                     leftp: 465,
@@ -899,7 +964,7 @@ class _HomePageState extends State<HomePage> {
                     name: 'B02LR08',
                     onLongPress: () {},
                   ),
-                      
+
                   //LEFT SIDE
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
@@ -941,7 +1006,7 @@ class _HomePageState extends State<HomePage> {
                     name: 'B02LR07',
                     onLongPress: () {},
                   ),
-                      
+
                   //BLOCK 03
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
@@ -953,7 +1018,7 @@ class _HomePageState extends State<HomePage> {
                     name: 'B03LR01',
                     onLongPress: () {},
                   ),
-                      
+
                   //BLOCK 04
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
@@ -965,7 +1030,7 @@ class _HomePageState extends State<HomePage> {
                     name: 'B04LR01',
                     onLongPress: () {},
                   ),
-                      
+
                   //BLOCK 05
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
@@ -977,25 +1042,24 @@ class _HomePageState extends State<HomePage> {
                     name: 'B05LR01',
                     onLongPress: () {},
                   ),
-                      
+
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
                     width: 250,
                     height: 70,
                     leftp: 45,
-                    color: checkSessionForName("Bsmth"),
+                    color: checkSessionForName("MPH01B22"),
                     topP: 1918,
-                    name: 'B22',
-                    onLongPress: () {},
+                    name: 'MPH01B22',
                     onTripleTap: () {
                       //   addVenueToOccupied('Bsmth');
-                      occupiedVenueList.forEach((key, value) {});
+                      //occupiedVenueList.forEach((key, value) {});
                     },
                   )
                 ],
               ),
             ),
-         ),
+          ),
         ),
       ),
     );
