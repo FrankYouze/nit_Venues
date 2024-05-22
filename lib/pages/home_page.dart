@@ -74,6 +74,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               if (VenueColor == Colors.green) {
                 occupiedRef.push().set(VenueId);
+                releaseddRef.child(VenueId).remove();
 
                 occupiedRef.onValue.listen((event2) {
                   setState(() {
@@ -191,6 +192,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               if (VenueColor == Colors.red) {
                 releaseddRef.push().set(VenueId);
+                occupiedRef.child(VenueId).remove();
 
                 releaseddRef.onValue.listen((eventX) {
                   setState(() {
@@ -871,7 +873,7 @@ class _HomePageState extends State<HomePage> {
                     width: 49,
                     height: 80,
                     leftp: 361,
-                    color: Colors.greenAccent,
+                    color: Colors.green,
                     topP: 961,
                     name: 'Bl 15',
 
@@ -884,7 +886,7 @@ class _HomePageState extends State<HomePage> {
                     width: 220,
                     height: 50,
                     leftp: 270,
-                    color: Colors.black,
+                    color: checkSessionForName('B06'),
                     topP: 1305,
                     name: 'B06',
                     // onLongPress: () {
