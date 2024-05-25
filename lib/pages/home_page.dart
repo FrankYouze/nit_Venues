@@ -944,7 +944,7 @@ class _HomePageState extends State<HomePage> {
                     width: 49,
                     height: 120,
                     leftp: 90,
-                    color: Colors.blue,
+                    color: Colors.green,
                     topP: 855,
                     name: 'Bl 15',
                     onLongPress: () {},
@@ -955,7 +955,7 @@ class _HomePageState extends State<HomePage> {
                     width: 49,
                     height: 129,
                     leftp: 89,
-                    color: Colors.red,
+                    color: Colors.green,
                     topP: 975,
                     name: 'Bl 15',
                     onLongPress: () {},
@@ -1009,12 +1009,16 @@ class _HomePageState extends State<HomePage> {
                     //   // addNameToList('B06');
                     // },
                     onTripleTap: () {
-                      _addVenueToOccupied(
-                          context, "B06", checkSessionForName('B06'));
-                      occupiedVenueList.forEach((key, value) {
-                        print(value);
-                        print('double');
-                      });
+                      if (checkSessionForName("B06") == Colors.green) {
+                        _addVenueToOccupied(
+                          context,
+                          "B06",
+                          checkSessionForName("B06"),
+                        );
+                      } else {
+                        _addVenueToReleased(
+                            context, "B21LR01", checkSessionForName("06"));
+                      }
                     },
                   ),
 
