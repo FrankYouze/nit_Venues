@@ -3,7 +3,7 @@ import 'package:nit_avros/pages/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:nit_avros/pages/home_page.dart';
-import 'package:nit_avros/pages/somepage.dart';
+
 import 'package:nit_avros/pages/venue_data.dart';
 
 void main() async {

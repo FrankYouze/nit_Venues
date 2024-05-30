@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> {
       FirebaseDatabase.instance.ref().child('releasedVenues');
 
   Map<String, dynamic> timetableData1 = {};
+  User? currUser;
   // List<String> releasedVenues = [];
   // List<String> occupiedVenue = [];
   Map<String, dynamic> occupiedVenueList = {};
@@ -197,7 +198,8 @@ class _HomePageState extends State<HomePage> {
         action: SnackBarAction(
             label: 'RELEASE',
             onPressed: () {
-              if (VenueColor == Colors.red) {
+              User? user = FirebaseAuth.instance.currentUser;
+              if (VenueColor == Colors.red && user != currUser) {
                 releaseddRef.child(VenueId).set(VenueId);
                 occupiedRef.child(VenueId).remove();
 
@@ -306,28 +308,28 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SizedBox(
-          width: 75,
-          height: 40,
-          child: FloatingActionButton(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            onPressed: () {
-              //  print(timetableData1.keys);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const VenueData(),
-                ),
-              );
-              //   _showToast(context);
-            },
-            child: const Text("Timetable"),
-          ),
-        ),
-      ),
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.all(20.0),
+      //   child: SizedBox(
+      //     width: 75,
+      //     height: 40,
+      //     child: FloatingActionButton(
+      //       backgroundColor: Colors.black,
+      //       foregroundColor: Colors.white,
+      //       onPressed: () {
+      //         //  print(timetableData1.keys);
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(
+      //             builder: (context) => const VenueData(),
+      //           ),
+      //         );
+      //         //   _showToast(context);
+      //       },
+      //       child: const Text("Timetable"),
+      //     ),
+      //   ),
+      // ),
       body: Container(
         child: InteractiveViewer(
           boundaryMargin: const EdgeInsets.all(double.infinity),

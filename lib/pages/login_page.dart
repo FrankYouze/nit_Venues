@@ -29,16 +29,19 @@ await FirebaseAuth.instance.signInWithEmailAndPassword(
             child: Column(
               children: [
                 const SizedBox(
-                  height: 250,
+                  height: 50,
                 ),
                 const Text(
-                  "Welcome Back",
+                  "Login",
                   style: TextStyle(
                       color: Color.fromARGB(255, 44, 43, 43), fontSize: 22),
                 ),
-                const SizedBox(height: 10,),
+                SizedBox(height: 20,),
+             
+
+                 SizedBox(height: 10,),
                 MyTextField(
-                  myText: "enter user name",
+                  myText: "enter user email",
                   obscu: false,
                   controller: userEmailcon,
                 ),

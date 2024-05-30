@@ -2,6 +2,8 @@ import 'package:nit_avros/pages/home_page.dart';
 import 'package:nit_avros/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nit_avros/pages/some_page.dart';
+
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -15,7 +17,7 @@ builder: (context,snapshot){
 
 if(snapshot.hasData){
 
-  return HomePage();
+  return SomePage();
 }else{
 
   return LoginPage();
