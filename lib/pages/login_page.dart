@@ -36,10 +36,10 @@ await FirebaseAuth.instance.signInWithEmailAndPassword(
                   style: TextStyle(
                       color: Color.fromARGB(255, 44, 43, 43), fontSize: 22),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 30,),
              
 
-                 SizedBox(height: 10,),
+                 //SizedBox(height: 10,),
                 MyTextField(
                   myText: "enter user email",
                   obscu: false,

@@ -26,6 +26,8 @@ class _HomePageState extends State<HomePage> {
       FirebaseDatabase.instance.ref().child('occupiedVenues');
   DatabaseReference releaseddRef =
       FirebaseDatabase.instance.ref().child('releasedVenues');
+  DatabaseReference usersRef =
+      FirebaseDatabase.instance.ref().child('currentUsers');
 
   Map<String, dynamic> timetableData1 = {};
   User? currUser;
@@ -73,6 +75,10 @@ class _HomePageState extends State<HomePage> {
         action: SnackBarAction(
             label: 'OCCUPIE',
             onPressed: () {
+                 User? user = FirebaseAuth.instance.currentUser;
+                  usersRef.child("releaser").child(user!.uid).remove();
+                 usersRef.child("occupants").set(user!.uid);
+                 print("uid "+user.uid);
               if (VenueColor == Colors.green) {
                 occupiedRef.child(VenueId).set(VenueId);
                 releaseddRef.child(VenueId).remove();
@@ -197,9 +203,12 @@ class _HomePageState extends State<HomePage> {
         content: const Text('Are you sure you want to Release selected venue?'),
         action: SnackBarAction(
             label: 'RELEASE',
-            onPressed: () {
-              User? user = FirebaseAuth.instance.currentUser;
-              if (VenueColor == Colors.red && user != currUser) {
+            onPressed: () async {
+               User? user = FirebaseAuth.instance.currentUser;
+                await usersRef.child("occupants").child(user!.uid).remove();
+               await  usersRef.child("releaser").set(user!.uid);
+               
+              if (VenueColor == Colors.red) {
                 releaseddRef.child(VenueId).set(VenueId);
                 occupiedRef.child(VenueId).remove();
 
@@ -379,7 +388,7 @@ class _HomePageState extends State<HomePage> {
                     height: 2000,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage("assets/VNS.png"),
+                        image: AssetImage("assets/new.jpg"),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -424,7 +433,7 @@ class _HomePageState extends State<HomePage> {
                         if (checkSessionForName("B14LR03") == Colors.green) {
                           _addVenueToOccupied(
                             context,
-                            "B14LR02",
+                            "B14LR03",
                             checkSessionForName("B14LR03"),
                           );
                         } else {
@@ -470,7 +479,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else {
                         _addVenueToReleased(
-                            context, "B13LR01", checkSessionForName("B14LR02"));
+                            context, "B13LR01", checkSessionForName("B13LR01"));
                       }
                     },
                   ),
