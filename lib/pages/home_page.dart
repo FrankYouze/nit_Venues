@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
                  User? user = FirebaseAuth.instance.currentUser;
                   usersRef.child("releaser").child(user!.uid).remove();
-                 usersRef.child("occupants").set(user!.uid);
+                 usersRef.child("occupants").child(DateTime.now().hour.toString()).set(user!.uid);
                  print("uid "+user.uid);
               if (VenueColor == Colors.green) {
                 occupiedRef.child(VenueId).set(VenueId);
