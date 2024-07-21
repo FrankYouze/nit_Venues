@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/rendering.dart';
 import 'package:nit_avros/components/custom_container.dart';
 import 'package:nit_avros/pages/venue_data.dart';
@@ -30,6 +32,8 @@ class _HomePageState extends State<HomePage> {
       FirebaseDatabase.instance.ref().child('currentUsers');
 
   Map<String, dynamic> timetableData1 = {};
+  Map<dynamic, dynamic> occupants = {};
+  Map<dynamic,dynamic> releaser = {};
   User? currUser;
   // List<String> releasedVenues = [];
   // List<String> occupiedVenue = [];
@@ -62,6 +66,39 @@ class _HomePageState extends State<HomePage> {
         updateReleasedVenenues();
       });
     });
+
+    usersRef.child("occupants").once().then((event) {
+      final Dsnapshot = event.snapshot;
+
+      if (Dsnapshot.value != null) {
+        Map<dynamic, dynamic> data = Dsnapshot.value as Map<dynamic, dynamic>;
+
+        setState(() {
+          occupants = Map<dynamic, dynamic>.from(data);
+          print("${occupants.keys} occupied");
+        });
+      }
+      // occupants = Map<String, dynamic>.from(
+      //   event.snapshot.value as Map<dynamic, dynamic>);
+      //     print(" KEYS");
+    });
+
+
+        usersRef.child("releaser").once().then((event) {
+      final Dsnapshot = event.snapshot;
+
+      if (Dsnapshot.value != null) {
+        Map<dynamic, dynamic> data = Dsnapshot.value as Map<dynamic, dynamic>;
+
+        setState(() {
+          releaser = Map<dynamic, dynamic>.from(data);
+          print("${releaser} releasersss");
+        });
+      }
+      // occupants = Map<String, dynamic>.from(
+      //   event.snapshot.value as Map<dynamic, dynamic>);
+      //     print(" KEYS");
+    });
   }
 
 //function to add venue to occupiedRef
@@ -75,10 +112,14 @@ class _HomePageState extends State<HomePage> {
         action: SnackBarAction(
             label: 'OCCUPIE',
             onPressed: () {
-                 User? user = FirebaseAuth.instance.currentUser;
-                  usersRef.child("releaser").child(user!.uid).remove();
-                 usersRef.child("occupants").child(DateTime.now().hour.toString()).set(user!.uid);
-                 print("uid "+user.uid);
+              User? user = FirebaseAuth.instance.currentUser;
+              if (occupants.containsKey(user!.uid)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("YOU HAVE REACHED THE LIMIT")));
+              }else{
+              usersRef.child("releaser").child(user!.uid).remove();
+              usersRef.child("occupants").child(user!.uid).set(user!.uid);
+              // print("uid "+user.uid);
               if (VenueColor == Colors.green) {
                 occupiedRef.child(VenueId).set(VenueId);
                 releaseddRef.child(VenueId).remove();
@@ -109,8 +150,10 @@ class _HomePageState extends State<HomePage> {
                 );
 
                 // print("already occupied");
-              }
-            }),
+              }}
+            }
+            
+            ),
       ),
     );
   }
@@ -204,10 +247,13 @@ class _HomePageState extends State<HomePage> {
         action: SnackBarAction(
             label: 'RELEASE',
             onPressed: () async {
-               User? user = FirebaseAuth.instance.currentUser;
-                await usersRef.child("occupants").child(user!.uid).remove();
-               await  usersRef.child("releaser").set(user!.uid);
-               
+              User? user = FirebaseAuth.instance.currentUser;
+
+
+
+              await usersRef.child("occupants").child(user!.uid).remove();
+              await usersRef.child("releaser").child(user!.uid).set(user!.uid);
+
               if (VenueColor == Colors.red) {
                 releaseddRef.child(VenueId).set(VenueId);
                 occupiedRef.child(VenueId).remove();
@@ -438,7 +484,7 @@ class _HomePageState extends State<HomePage> {
                           );
                         } else {
                           _addVenueToReleased(context, "B14LR03",
-                              checkSessionForName("B14LR02"));
+                              checkSessionForName("B14LR03"));
                         }
                       }),
 
@@ -794,28 +840,27 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                   CustomVenue(
-                    borderRadius: BorderRadius.circular(1),
-                    width: 50,
-                    height: 106,
-                    leftp: 1055,
-                    color: checkSessionForName(
-                      "CLASSV",
-                    ),
-                    topP: 1,
-                    name: 'CLASSV',
-                       onTripleTap: () {
-                      if (checkSessionForName("CLASSV") == Colors.green) {
-                        _addVenueToOccupied(
-                          context,
-                          "CLASSV",
-                          checkSessionForName("CLASSV"),
-                        );
-                      } else {
-                        _addVenueToReleased(
-                            context, "CLASSV", checkSessionForName("CLASSV"));
-                      }
-                    }
-                  ),
+                      borderRadius: BorderRadius.circular(1),
+                      width: 50,
+                      height: 106,
+                      leftp: 1055,
+                      color: checkSessionForName(
+                        "CLASSV",
+                      ),
+                      topP: 1,
+                      name: 'CLASSV',
+                      onTripleTap: () {
+                        if (checkSessionForName("CLASSV") == Colors.green) {
+                          _addVenueToOccupied(
+                            context,
+                            "CLASSV",
+                            checkSessionForName("CLASSV"),
+                          );
+                        } else {
+                          _addVenueToReleased(
+                              context, "CLASSV", checkSessionForName("CLASSV"));
+                        }
+                      }),
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
                     width: 112,
@@ -826,7 +871,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     topP: 1,
                     name: 'B20LR01',
-                        onTripleTap: () {
+                    onTripleTap: () {
                       if (checkSessionForName("B20LR01") == Colors.green) {
                         _addVenueToOccupied(
                           context,
@@ -861,7 +906,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     topP: 210,
                     name: 'CLASSVII',
-                      onTripleTap: () {
+                    onTripleTap: () {
                       if (checkSessionForName("CLASSVII") == Colors.green) {
                         _addVenueToOccupied(
                           context,
@@ -869,32 +914,31 @@ class _HomePageState extends State<HomePage> {
                           checkSessionForName("CLASSVII"),
                         );
                       } else {
-                        _addVenueToReleased(
-                            context, "CLASSVII", checkSessionForName("CLASSVII"));
+                        _addVenueToReleased(context, "CLASSVII",
+                            checkSessionForName("CLASSVII"));
                       }
                     },
                   ),
                   CustomVenue(
-                    borderRadius: BorderRadius.circular(1),
-                    width: 110,
-                    height: 50,
-                    leftp: 805,
-                    color: checkSessionForName('CLASSIII'),
-                    topP: 270,
-                    name: 'CLASSIII',
+                      borderRadius: BorderRadius.circular(1),
+                      width: 110,
+                      height: 50,
+                      leftp: 805,
+                      color: checkSessionForName('CLASSIII'),
+                      topP: 270,
+                      name: 'CLASSIII',
                       onTripleTap: () {
-                      if (checkSessionForName("CLASSIII") == Colors.green) {
-                        _addVenueToOccupied(
-                          context,
-                          "CLASSIII",
-                          checkSessionForName("CLASSIII"),
-                        );
-                      } else {
-                        _addVenueToReleased(
-                            context, "CLASSIII", checkSessionForName("CLASSIII"));
-                      }
-                    }
-                  ),
+                        if (checkSessionForName("CLASSIII") == Colors.green) {
+                          _addVenueToOccupied(
+                            context,
+                            "CLASSIII",
+                            checkSessionForName("CLASSIII"),
+                          );
+                        } else {
+                          _addVenueToReleased(context, "CLASSIII",
+                              checkSessionForName("CLASSIII"));
+                        }
+                      }),
 
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
@@ -904,7 +948,7 @@ class _HomePageState extends State<HomePage> {
                     color: checkSessionForName('CLASSII'),
                     topP: 270,
                     name: 'CLASSII',
-                       onTripleTap: () {
+                    onTripleTap: () {
                       if (checkSessionForName("CLASSII") == Colors.green) {
                         _addVenueToOccupied(
                           context,
@@ -918,26 +962,25 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                   CustomVenue(
-                    borderRadius: BorderRadius.circular(1),
-                    width: 113,
-                    height: 50,
-                    leftp: 571,
-                    color: checkSessionForName('CLASSI'),
-                    topP: 270,
-                    name: 'CLASSI',
-                       onTripleTap: () {
-                      if (checkSessionForName("CLASSI") == Colors.green) {
-                        _addVenueToOccupied(
-                          context,
-                          "CLASSI",
-                          checkSessionForName("CLASSI"),
-                        );
-                      } else {
-                        _addVenueToReleased(
-                            context, "CLASSI", checkSessionForName("CLASSI"));
-                      }
-                    }
-                  ),
+                      borderRadius: BorderRadius.circular(1),
+                      width: 113,
+                      height: 50,
+                      leftp: 571,
+                      color: checkSessionForName('CLASSI'),
+                      topP: 270,
+                      name: 'CLASSI',
+                      onTripleTap: () {
+                        if (checkSessionForName("CLASSI") == Colors.green) {
+                          _addVenueToOccupied(
+                            context,
+                            "CLASSI",
+                            checkSessionForName("CLASSI"),
+                          );
+                        } else {
+                          _addVenueToReleased(
+                              context, "CLASSI", checkSessionForName("CLASSI"));
+                        }
+                      }),
                   CustomVenue(
                     borderRadius: BorderRadius.circular(1),
                     width: 60,
