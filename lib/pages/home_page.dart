@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
               User? user = FirebaseAuth.instance.currentUser;
               if (occupants.containsKey(user!.uid)) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("YOU HAVE REACHED THE LIMIT")));
+                    SnackBar(content: Text("YOU HAVE REACHED OCCUPIE LIMIT")));
               }else{
               usersRef.child("releaser").child(user!.uid).remove();
               usersRef.child("occupants").child(user!.uid).set(user!.uid);
@@ -249,7 +249,10 @@ class _HomePageState extends State<HomePage> {
             onPressed: () async {
               User? user = FirebaseAuth.instance.currentUser;
 
+if(releaser.containsKey(user!.uid)){
 
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("YOU HAVE REACHED RELEASE LIMIT")));
+}else{
 
               await usersRef.child("occupants").child(user!.uid).remove();
               await usersRef.child("releaser").child(user!.uid).set(user!.uid);
@@ -283,7 +286,7 @@ class _HomePageState extends State<HomePage> {
                 );
 
                 // print("already occupied");
-              }
+              }}
             }),
       ),
     );
