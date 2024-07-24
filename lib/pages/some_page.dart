@@ -74,12 +74,13 @@ class _SomePageState extends State<SomePage> {
      // DatabaseReference mondayRef = databaseRef.child('timetable/monday/0700-0800');
 
       DatabaseReference bookingRef =
-      FirebaseDatabase.instance.ref().child('timetable/$currentDay/${timeT.text}');
-      String? newKey = bookingRef.push().key;
-      if (newKey != null)
+      FirebaseDatabase.instance.ref().child('timetable/$currentDay/');
+    // String? newKey = bookingRef.key;
+    //  if (newKey != null){
       await bookingRef.update({
-        newKey: "${venueT.text}"
-      });
+        "${timeT.text}" :
+   ["${venueT.text}"]}
+      );
       print('Item added successfully');
     } catch (e) {
       print('Failed to add item: $e');
