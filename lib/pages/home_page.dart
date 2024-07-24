@@ -31,9 +31,10 @@ class _HomePageState extends State<HomePage> {
   DatabaseReference usersRef =
       FirebaseDatabase.instance.ref().child('currentUsers');
 
+
   Map<String, dynamic> timetableData1 = {};
   Map<dynamic, dynamic> occupants = {};
-  Map<dynamic,dynamic> releaser = {};
+  Map<dynamic, dynamic> releaser = {};
   User? currUser;
   // List<String> releasedVenues = [];
   // List<String> occupiedVenue = [];
@@ -83,8 +84,7 @@ class _HomePageState extends State<HomePage> {
       //     print(" KEYS");
     });
 
-
-        usersRef.child("releaser").once().then((event) {
+    usersRef.child("releaser").once().then((event) {
       final Dsnapshot = event.snapshot;
 
       if (Dsnapshot.value != null) {
@@ -116,44 +116,78 @@ class _HomePageState extends State<HomePage> {
               if (occupants.containsKey(user!.uid)) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("YOU HAVE REACHED OCCUPIE LIMIT")));
-              }else{
-              usersRef.child("releaser").child(user!.uid).remove();
-              usersRef.child("occupants").child(user!.uid).set(user!.uid);
-              // print("uid "+user.uid);
-              if (VenueColor == Colors.green) {
-                occupiedRef.child(VenueId).set(VenueId);
-                releaseddRef.child(VenueId).remove();
-
-                occupiedRef.onValue.listen((event2) {
-                  setState(() {
-                    occupiedVenueList = Map<String, dynamic>.from(
-                        event2.snapshot.value as Map<dynamic, dynamic>);
-                  });
-                });
-
-                releaseddRef.onValue.listen((eventX) {
-                  setState(() {
-                    releasedVenuesList = Map<String, dynamic>.from(
-                        eventX.snapshot.value as Map<dynamic, dynamic>);
-                    // occupiedVenueList.forEach((key, value) {
-                    //   occupiedVenue.add(value.toString());
-                    // });
-                  });
-                });
-
-                print(occupiedVenueList);
               } else {
-                scaffold.showSnackBar(
-                  SnackBar(
-                    content: const Text("venue already occupied"),
-                  ),
-                );
+                usersRef.child("releaser").child(user!.uid).remove();
+                usersRef.child("occupants").child(user!.uid).set(user!.uid);
 
-                // print("already occupied");
-              }}
-            }
-            
-            ),
+                usersRef.child("occupants").once().then((event) {
+                  final Dsnapshot = event.snapshot;
+
+                  if (Dsnapshot.value != null) {
+                    Map<dynamic, dynamic> data =
+                        Dsnapshot.value as Map<dynamic, dynamic>;
+
+                    setState(() {
+                      occupants = Map<dynamic, dynamic>.from(data);
+                      print("${occupants.keys} occupied");
+                    });
+                  }
+                  // occupants = Map<String, dynamic>.from(
+                  //   event.snapshot.value as Map<dynamic, dynamic>);
+                  //     print(" KEYS");
+                });
+
+                usersRef.child("releaser").once().then((event) {
+                  final Dsnapshot = event.snapshot;
+
+                  if (Dsnapshot.value != null) {
+                    Map<dynamic, dynamic> data =
+                        Dsnapshot.value as Map<dynamic, dynamic>;
+
+                    setState(() {
+                      releaser = Map<dynamic, dynamic>.from(data);
+                      print("${releaser} releasersss");
+                    });
+                  }
+                  // occupants = Map<String, dynamic>.from(
+                  //   event.snapshot.value as Map<dynamic, dynamic>);
+                  //     print(" KEYS");
+                });
+
+                // print("uid "+user.uid);
+                if (VenueColor == Colors.green) {
+                  occupiedRef.child(VenueId).set(VenueId);
+                  releaseddRef.child(VenueId).remove();
+
+                  occupiedRef.onValue.listen((event2) {
+                    setState(() {
+                      occupiedVenueList = Map<String, dynamic>.from(
+                          event2.snapshot.value as Map<dynamic, dynamic>);
+                    });
+                  });
+
+                  releaseddRef.onValue.listen((eventX) {
+                    setState(() {
+                      releasedVenuesList = Map<String, dynamic>.from(
+                          eventX.snapshot.value as Map<dynamic, dynamic>);
+                      // occupiedVenueList.forEach((key, value) {
+                      //   occupiedVenue.add(value.toString());
+                      // });
+                    });
+                  });
+
+                  //print(occupiedVenueList);
+                } else {
+                  scaffold.showSnackBar(
+                    SnackBar(
+                      content: const Text("venue already occupied"),
+                    ),
+                  );
+
+                  // print("already occupied");
+                }
+              }
+            }),
       ),
     );
   }
@@ -227,7 +261,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _addVenueToReleased(
-      BuildContext context, String VenueId, Color VenueColor) {
+      BuildContext context1, String VenueId, Color VenueColor) {
     //releaseddRef.push().set(VenueId);
 //  releaseddRef.onValue.listen((eventX) {
 //       setState(() {
@@ -240,7 +274,7 @@ class _HomePageState extends State<HomePage> {
 //     });
 //     print(releasedVenuesList);
 
-    final scaffold = ScaffoldMessenger.of(context);
+    final scaffold = ScaffoldMessenger.of(context1);
     scaffold.showSnackBar(
       SnackBar(
         content: const Text('Are you sure you want to Release selected venue?'),
@@ -249,44 +283,81 @@ class _HomePageState extends State<HomePage> {
             onPressed: () async {
               User? user = FirebaseAuth.instance.currentUser;
 
-if(releaser.containsKey(user!.uid)){
-
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("YOU HAVE REACHED RELEASE LIMIT")));
-}else{
-
-              await usersRef.child("occupants").child(user!.uid).remove();
-              await usersRef.child("releaser").child(user!.uid).set(user!.uid);
-
-              if (VenueColor == Colors.red) {
-                releaseddRef.child(VenueId).set(VenueId);
-                occupiedRef.child(VenueId).remove();
-
-                releaseddRef.onValue.listen((eventX) {
-                  setState(() {
-                    releasedVenuesList = Map<String, dynamic>.from(
-                        eventX.snapshot.value as Map<dynamic, dynamic>);
-                    // occupiedVenueList.forEach((key, value) {
-                    //   occupiedVenue.add(value.toString());
-                    // });
-                  });
-                });
-                occupiedRef.onValue.listen((event2) {
-                  setState(() {
-                    occupiedVenueList = Map<String, dynamic>.from(
-                        event2.snapshot.value as Map<dynamic, dynamic>);
-                  });
-                });
-
-                print(releasedVenuesList);
+              if (releaser.containsKey(user!.uid)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("YOU HAVE REACHED RELEASE LIMIT")));
               } else {
-                scaffold.showSnackBar(
-                  SnackBar(
-                    content: const Text("venue already released"),
-                  ),
-                );
+                await usersRef.child("occupants").child(user!.uid).remove();
+                await usersRef
+                    .child("releaser")
+                    .child(user!.uid)
+                    .set(user!.uid);
 
-                // print("already occupied");
-              }}
+                usersRef.child("occupants").once().then((event) {
+                  final Dsnapshot = event.snapshot;
+
+                  if (Dsnapshot.value != null) {
+                    Map<dynamic, dynamic> data =
+                        Dsnapshot.value as Map<dynamic, dynamic>;
+
+                    setState(() {
+                      occupants = Map<dynamic, dynamic>.from(data);
+                      print("${occupants.keys} occupied");
+                    });
+                  }
+                  // occupants = Map<String, dynamic>.from(
+                  //   event.snapshot.value as Map<dynamic, dynamic>);
+                  //     print(" KEYS");
+                });
+
+                usersRef.child("releaser").once().then((event) {
+                  final Dsnapshot = event.snapshot;
+
+                  if (Dsnapshot.value != null) {
+                    Map<dynamic, dynamic> data =
+                        Dsnapshot.value as Map<dynamic, dynamic>;
+
+                    setState(() {
+                      releaser = Map<dynamic, dynamic>.from(data);
+                      print("${releaser} releasersss");
+                    });
+                  }
+                  // occupants = Map<String, dynamic>.from(
+                  //   event.snapshot.value as Map<dynamic, dynamic>);
+                  //     print(" KEYS");
+                });
+
+                if (VenueColor == Colors.red) {
+                  releaseddRef.child(VenueId).set(VenueId);
+                  occupiedRef.child(VenueId).remove();
+
+                  releaseddRef.onValue.listen((eventX) {
+                    setState(() {
+                      releasedVenuesList = Map<String, dynamic>.from(
+                          eventX.snapshot.value as Map<dynamic, dynamic>);
+                      // occupiedVenueList.forEach((key, value) {
+                      //   occupiedVenue.add(value.toString());
+                      // });
+                    });
+                  });
+                  occupiedRef.onValue.listen((event2) {
+                    setState(() {
+                      occupiedVenueList = Map<String, dynamic>.from(
+                          event2.snapshot.value as Map<dynamic, dynamic>);
+                    });
+                  });
+
+                  print(releasedVenuesList);
+                } else {
+                  scaffold.showSnackBar(
+                    SnackBar(
+                      content: const Text("venue already released"),
+                    ),
+                  );
+
+                  // print("already occupied");
+                }
+              }
             }),
       ),
     );

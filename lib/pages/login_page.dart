@@ -54,7 +54,7 @@ await FirebaseAuth.instance.signInWithEmailAndPassword(
                   controller: passcon,
                 ),
                 const SizedBox(height: 20,),
-                 MyButton(onTap: signInUser ,)
+                 MyButton(onTap: signInUser ,string: "Login",)
               ],
             ),
           ),

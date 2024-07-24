@@ -1,4 +1,7 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:nit_avros/components/booking_box.dart';
 import 'package:nit_avros/pages/home_page.dart';
 import 'package:nit_avros/pages/venue_data.dart';
 
@@ -10,6 +13,9 @@ class SomePage extends StatefulWidget {
 }
 
 class _SomePageState extends State<SomePage> {
+ final venueT = TextEditingController();
+ final timeT  = TextEditingController();
+   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +53,41 @@ class _SomePageState extends State<SomePage> {
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => VenueData()));
+              },
+            ),
+             ListTile(
+              leading: Icon(Icons.calendar_today),
+              title: Text("BOOK VENUE"),
+              onTap: () {
+                 showDialog(
+      context: context,
+      builder: (context) {
+        return BookingBox(
+        venueCon: venueT,
+        timeCon: timeT,
+        BookFunc: () async{
+          //bookingRef.child(timeT.text).set(venueT);
+            DateTime now = DateTime.now();
+            String currentDay = DateFormat('EEEE').format(now).toLowerCase();
+
+             try {
+     // DatabaseReference mondayRef = databaseRef.child('timetable/monday/0700-0800');
+
+      DatabaseReference bookingRef =
+      FirebaseDatabase.instance.ref().child('timetable/$currentDay/${timeT.text}');
+      String? newKey = bookingRef.push().key;
+      if (newKey != null)
+      await bookingRef.update({
+        newKey: "${venueT.text}"
+      });
+      print('Item added successfully');
+    } catch (e) {
+      print('Failed to add item: $e');
+    }
+        },
+        );
+      },
+    );
               },
             ),
           ],
